@@ -1,6 +1,7 @@
 package com.kd.test.test_calculator.service.impl;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class CalServiceImpl implements CalService{
     
   @Override
   public double div(double i1, double i2) {
-    return BigDecimal.valueOf(1).divide(BigDecimal.valueOf(i2)).doubleValue();
+    return BigDecimal.valueOf(1).divide(BigDecimal.valueOf(i2),3, RoundingMode.CEILING).doubleValue();
   }
 
   @Override
