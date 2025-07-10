@@ -4,6 +4,10 @@
       branches:
         - main
 
+  defaults:
+    run:
+      working-directory: ./test-calculator
+
   jobs:
     build-deploy:
       name: build and deploy spring-api
@@ -19,16 +23,14 @@
             java-version: 21
 
         - name: unit tests
-          working-directory: test-calculator
           run: mvn -B test --file pom.xml
 
         - name: build the app
-          working-directory: test-calculator
           run: |
             mvn clean
             mvn -B package --file pom.xml
+
         - name: build the docker image
-          working-directory: test-calculator
           uses: docker/build-push-action@v4
           with:
             context: .
