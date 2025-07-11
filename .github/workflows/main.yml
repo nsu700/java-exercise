@@ -12,6 +12,9 @@
     build-deploy:
       name: build and deploy spring-api
       runs-on: ubuntu-24.04
+      defaults:
+        run:
+          working-directory: ./test-calculator
       steps:
         - name: checkout code
           uses: actions/checkout@v3
@@ -22,6 +25,9 @@
             distribution: 'corretto'
             java-version: 21
 
+        - name: bash
+          run: pwd && ls
+          
         - name: unit tests
           run: mvn -B test --file pom.xml
 
