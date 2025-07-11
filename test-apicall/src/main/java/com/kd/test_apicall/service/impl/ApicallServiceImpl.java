@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.kd.test_apicall.entity.UserEntity;
 import com.kd.test_apicall.model.Users;
@@ -30,15 +31,14 @@ public class ApicallServiceImpl implements ApicallService{
 
   @Override
   public List<UserEntity> getAndSaveUsers() {
-    // URL url = UriComponentsBuilder.newInstance()
-    //   .scheme(protocol)
-    //   .host(host)
-    //   .path(userEndpoint)
-    //   .build()
-    //   .toUri()
-    //   .toURL();
+    String url = UriComponentsBuilder.newInstance()
+      .scheme(protocol)
+      .host(host)
+      .path(userEndpoint)
+      .build()
+      .toUriString();
 
-    Users[] users = new RestTemplate().getForObject("https://"+host+userEndpoint, Users[].class);
+    Users[] users = new RestTemplate().getForObject(url, Users[].class);
     List<UserEntity> userEntitys = new ArrayList<>(users.length);
     for(Users user: users) {
       userEntitys.add(UserEntity.builder()
