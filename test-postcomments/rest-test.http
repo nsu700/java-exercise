@@ -4,4 +4,7 @@ GET http://localhost:8080/users
 POST http://localhost:8080/users
 
 ###
-GET http://localhost:8080/greet
+GET http://localhost:8080/posts
+
+###
+POST http://localhost:8080/posts

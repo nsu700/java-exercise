@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kdkd.test_postcomments.controller.UserController;
+import com.kdkd.test_postcomments.entity.PostEntity;
 import com.kdkd.test_postcomments.entity.UserEntity;
+import com.kdkd.test_postcomments.model.PostModel;
 import com.kdkd.test_postcomments.model.UserModel;
 import com.kdkd.test_postcomments.service.UserService;
 
@@ -27,7 +29,12 @@ public class UserControllerImpl implements UserController{
   }
 
   @Override
-  public String greet() {
-    return userService.greet();
+  public PostModel[] getPosts() {
+    return userService.getPosts();
+  }
+
+  @Override
+  public List<PostEntity> savePosts() {
+    return userService.savePosts();
   }
 }

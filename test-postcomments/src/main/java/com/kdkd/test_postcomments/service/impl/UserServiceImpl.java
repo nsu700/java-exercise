@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-
+import com.kdkd.test_postcomments.entity.PostEntity;
 import com.kdkd.test_postcomments.entity.UserEntity;
+import com.kdkd.test_postcomments.model.PostModel;
 import com.kdkd.test_postcomments.model.UserModel;
+import com.kdkd.test_postcomments.repository.PostRepository;
 import com.kdkd.test_postcomments.repository.UserRepository;
 import com.kdkd.test_postcomments.service.UserService;
-
-import jakarta.annotation.PostConstruct;
 
 
 @Service
@@ -22,34 +22,20 @@ public class UserServiceImpl implements UserService{
   @Autowired
   private UserRepository userRepository;
 
-  @Value("${conf.jsonplaceholder.host}")
-  private String host;
+  @Autowired
+  private PostRepository postRepository;
 
-  @Value("${conf.protocol}")
-  private String protocol; 
+
+  @Autowired
+  private UriComponentsBuilder uriComponentsBuilder;
 
   @Value("${conf.jsonplaceholder.endpoints.users}")
   private String userEndpoint;
-  
-  // 2. Declare the field, but don't initialize it here
-  private String userURL;
-
-  // 3. This method will run after the @Value fields are populated
-  @PostConstruct
-  public void initURL() {
-      System.out.println("Building User URL after properties are injected...");
-      this.userURL = UriComponentsBuilder.newInstance()
-          .scheme(protocol)
-          .host(host)
-          .path(userEndpoint)
-          .build()
-          .toUriString();
-      System.out.println("Constructed URL: " + this.userURL);
-  }
 
   @Override
   public List<UserEntity> saveUser() {
-    UserModel[] userModels = new RestTemplate().getForObject(this.userURL, UserModel[].class);
+    UserModel[] userModels = new RestTemplate()
+    .getForObject(uriComponentsBuilder.path(userEndpoint).build().toString(), UserModel[].class);
     List<UserEntity> userEntitys = new ArrayList<>(userModels.length);
     for(UserModel user: userModels) {
       userEntitys.add(UserEntity.builder()
@@ -66,11 +52,24 @@ public class UserServiceImpl implements UserService{
 
   @Override
   public UserModel[] getUser() {
-    return new RestTemplate().getForObject(userURL, UserModel[].class);
+    return new RestTemplate().getForObject(uriComponentsBuilder.path(userEndpoint).build().toString(), UserModel[].class);
   }
 
   @Override
-  public String greet() {
-    return "hello";
+  public PostModel[] getPosts() {
+    return new RestTemplate().getForObject("https://jsonplaceholder.typicode.com/posts", PostModel[].class);
+  }
+
+  @Override
+  public List<PostEntity> savePosts() {
+    PostModel[] postModels = this.getPosts();
+    List<PostEntity> postEntities = new ArrayList<>(postModels.length);
+    for(PostModel postModel: postModels) {
+      postEntities.add(PostEntity.builder()
+      .body(postModel.getBody())
+      .title(postModel.getTitle())
+      .build());
+    }
+    return postRepository.saveAll(postEntities);
   }
 }
