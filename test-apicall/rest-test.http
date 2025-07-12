@@ -1,1 +1,4 @@
-POST http://localhost:8080/saveusers HTTP/1.1
+POST http://localhost:8080/user HTTP/1.1
+
+###
+POST http://localhost:8080/address HTTP/1.1
