@@ -9,5 +9,6 @@ public class PostModel {
     private String body;
     @JsonProperty("userId")
     private Long userid;
-    private Long id;
+    @JsonProperty("id")
+    private Long postid;
 }

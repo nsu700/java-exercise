@@ -19,8 +19,9 @@ public class PostEntity {
 
   private String title;
   private String body;
+  private Long postid;
 
   @ManyToOne
-  @JoinColumn(name="userid")
+  @JoinColumn(name="user_id", nullable=false)
   private UserEntity userEntity;
 }

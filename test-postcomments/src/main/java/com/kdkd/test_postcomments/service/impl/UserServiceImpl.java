@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import com.kdkd.test_postcomments.entity.PostEntity;
 import com.kdkd.test_postcomments.entity.UserEntity;
 import com.kdkd.test_postcomments.model.PostModel;
@@ -26,16 +27,24 @@ public class UserServiceImpl implements UserService{
   private PostRepository postRepository;
 
 
-  @Autowired
-  private UriComponentsBuilder uriComponentsBuilder;
+  // @Autowired
+  // private UriComponentsBuilder uriComponentsBuilder;
+
+  @Value("${conf.jsonplaceholder.host}")
+  private String host;
+
+  @Value("${conf.protocol}")
+  private String protocol; 
 
   @Value("${conf.jsonplaceholder.endpoints.users}")
   private String userEndpoint;
 
+  @Value("${conf.jsonplaceholder.endpoints.posts}")
+  private String postsEndpoint;
+
   @Override
   public List<UserEntity> saveUser() {
-    UserModel[] userModels = new RestTemplate()
-    .getForObject(uriComponentsBuilder.path(userEndpoint).build().toString(), UserModel[].class);
+    UserModel[] userModels = this.getUser();
     List<UserEntity> userEntitys = new ArrayList<>(userModels.length);
     for(UserModel user: userModels) {
       userEntitys.add(UserEntity.builder()
@@ -52,12 +61,22 @@ public class UserServiceImpl implements UserService{
 
   @Override
   public UserModel[] getUser() {
-    return new RestTemplate().getForObject(uriComponentsBuilder.path(userEndpoint).build().toString(), UserModel[].class);
+    return new RestTemplate().getForObject(UriComponentsBuilder.newInstance()
+            .scheme(protocol)
+            .host(host)
+            .path(userEndpoint)
+            .build()
+            .toString(), UserModel[].class);
   }
 
   @Override
   public PostModel[] getPosts() {
-    return new RestTemplate().getForObject("https://jsonplaceholder.typicode.com/posts", PostModel[].class);
+    return new RestTemplate().getForObject(UriComponentsBuilder.newInstance()
+            .scheme(protocol)
+            .host(host)
+            .path(postsEndpoint)
+            .build()
+            .toString(), PostModel[].class);
   }
 
   @Override
@@ -66,6 +85,7 @@ public class UserServiceImpl implements UserService{
     List<PostEntity> postEntities = new ArrayList<>(postModels.length);
     for(PostModel postModel: postModels) {
       postEntities.add(PostEntity.builder()
+      .postid(postModel.getPostid())
       .body(postModel.getBody())
       .title(postModel.getTitle())
       .build());
