@@ -6,15 +6,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.kdkd.test_postcomments.entity.UserEntity;
-import com.kdkd.test_postcomments.model.UserModel;
+import com.kdkd.test_postcomments.entity.PostEntity;
+import com.kdkd.test_postcomments.model.PostModel;
 
 
 @Controller
-public interface UserController {
-  @GetMapping(value="/users")
-  UserModel[] getUsers();
+public interface PostController {
+  @GetMapping(value="/posts")
+  PostModel[] getPosts();
 
-  @PostMapping(value="/users")
-  List<UserEntity> saveUsers();
+  @PostMapping(value="/posts")
+  List<PostEntity> savePosts();
 }

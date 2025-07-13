@@ -9,11 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.kdkd.test_postcomments.entity.PostEntity;
 import com.kdkd.test_postcomments.entity.UserEntity;
-import com.kdkd.test_postcomments.model.PostModel;
 import com.kdkd.test_postcomments.model.UserModel;
-import com.kdkd.test_postcomments.repository.PostRepository;
 import com.kdkd.test_postcomments.repository.UserRepository;
 import com.kdkd.test_postcomments.service.UserService;
 
@@ -22,13 +19,6 @@ import com.kdkd.test_postcomments.service.UserService;
 public class UserServiceImpl implements UserService{
   @Autowired
   private UserRepository userRepository;
-
-  @Autowired
-  private PostRepository postRepository;
-
-
-  // @Autowired
-  // private UriComponentsBuilder uriComponentsBuilder;
 
   @Value("${conf.jsonplaceholder.host}")
   private String host;
@@ -67,32 +57,5 @@ public class UserServiceImpl implements UserService{
             .path(userEndpoint)
             .build()
             .toString(), UserModel[].class);
-  }
-
-  @Override
-  public PostModel[] getPosts() {
-    return new RestTemplate().getForObject(UriComponentsBuilder.newInstance()
-            .scheme(protocol)
-            .host(host)
-            .path(postsEndpoint)
-            .build()
-            .toString(), PostModel[].class);
-  }
-
-  @Override
-  public List<PostEntity> savePosts() {
-    PostModel[] postModels = this.getPosts();
-    List<PostEntity> postEntities = new ArrayList<>(postModels.length);
-    for(PostModel postModel: postModels) {
-      UserEntity userEntity = this.userRepository.findById(postModel.getUserid())
-        .orElseThrow();
-      postEntities.add(PostEntity.builder()
-      .postid(postModel.getPostid())
-      .body(postModel.getBody())
-      .title(postModel.getTitle())
-      .userEntity(userEntity)
-      .build());
-    }
-    return postRepository.saveAll(postEntities);
   }
 }
