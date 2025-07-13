@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService{
       .email(user.getEmail())
       .name(user.getName())
       .phone(user.getPhone())
-      .userid(user.getUserid())
+      .userId(user.getUserid())
       .username(user.getUsername())
       .website(user.getWebsite())
       .build());
@@ -57,5 +57,18 @@ public class UserServiceImpl implements UserService{
             .path(userEndpoint)
             .build()
             .toString(), UserModel[].class);
+  }
+
+  @Override
+  public UserEntity updateUserId(Long userId, Long newUserId) {
+    UserEntity userEntity = this.userRepository.findByUserId(userId).orElseThrow();
+    userEntity.setUserId(newUserId);
+    return this.userRepository.save(userEntity);
+  }
+
+  @Override
+  public void deleteUser(Long userId) {
+    UserEntity userEntity = this.userRepository.findByUserId(userId).orElseThrow();
+    this.userRepository.delete(userEntity);
   }
 }

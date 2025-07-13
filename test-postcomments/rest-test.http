@@ -1,7 +1,13 @@
 GET http://localhost:8080/users
 
-###
+### Save all users data
 POST http://localhost:8080/users
+
+### Update user id testing
+POST http://localhost:8080/users/updateId?userid=1&newuserid=100
+
+### Delete user id
+DELETE http://localhost:8080/users/delete?userid=10
 
 ###
 GET http://localhost:8080/posts

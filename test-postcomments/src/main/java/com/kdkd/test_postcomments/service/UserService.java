@@ -8,4 +8,6 @@ import com.kdkd.test_postcomments.model.UserModel;
 public interface UserService {
   UserModel[] getUser();
   List<UserEntity> saveUser();
+  UserEntity updateUserId(Long userId, Long newUserId);
+  void deleteUser(Long userId);
 }

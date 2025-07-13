@@ -25,4 +25,14 @@ public class UserControllerImpl implements UserController{
   public List<UserEntity> saveUsers() {
     return userService.saveUser();
   }
+
+  @Override
+  public UserEntity updateUserId(Long userid, Long newuserid) {
+    return userService.updateUserId(userid, newuserid);
+  }
+
+  @Override
+  public void deleteUser(Long userid) {
+    userService.deleteUser(userid);
+  }
 }
