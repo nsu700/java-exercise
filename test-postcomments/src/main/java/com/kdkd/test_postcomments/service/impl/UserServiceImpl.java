@@ -84,10 +84,13 @@ public class UserServiceImpl implements UserService{
     PostModel[] postModels = this.getPosts();
     List<PostEntity> postEntities = new ArrayList<>(postModels.length);
     for(PostModel postModel: postModels) {
+      UserEntity userEntity = this.userRepository.findById(postModel.getUserid())
+        .orElseThrow();
       postEntities.add(PostEntity.builder()
       .postid(postModel.getPostid())
       .body(postModel.getBody())
       .title(postModel.getTitle())
+      .userEntity(userEntity)
       .build());
     }
     return postRepository.saveAll(postEntities);
