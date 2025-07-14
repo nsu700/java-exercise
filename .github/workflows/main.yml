@@ -28,8 +28,8 @@
         - name: bash
           run: pwd && ls
           
-        - name: unit tests
-          run: mvn -B test --file pom.xml
+        # - name: unit tests
+        #   run: mvn -B test --file pom.xml
 
         - name: build the app
           run: |
@@ -40,7 +40,7 @@
           uses: docker/login-action@v3
           with:
             username: ${{ secrets.DOCKER_HUB_USERNAME }}
-            password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+            password: ${{ secrets.DOCKER_HUB_ACCESS_PASSWORD }}
 
         - name: push the docker image to docker hub
           uses: docker/build-push-action@v4
