@@ -40,7 +40,7 @@
           uses: docker/build-push-action@v4
           with:
             context: ./test-calculator
-            file: ./Dockerfile
+            file: ./test-calculator/Dockerfile
             push: false
             tags: ${{ secrets.DOCKER_HUB_NAME }}/test-calculator:latest
 
