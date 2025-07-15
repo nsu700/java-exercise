@@ -61,14 +61,14 @@ public class UserServiceImpl implements UserService{
 
   @Override
   public UserEntity updateUserId(Long userId, Long newUserId) {
-    UserEntity userEntity = this.userRepository.findByUserId(userId).orElseThrow();
+    UserEntity userEntity = this.userRepository.findByUserId(userId);
     userEntity.setUserId(newUserId);
     return this.userRepository.save(userEntity);
   }
 
   @Override
   public void deleteUser(Long userId) {
-    UserEntity userEntity = this.userRepository.findByUserId(userId).orElseThrow();
+    UserEntity userEntity = this.userRepository.findByUserId(userId);
     this.userRepository.delete(userEntity);
   }
 }
